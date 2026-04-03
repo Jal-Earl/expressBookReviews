@@ -1,7 +1,5 @@
 const express = require('express')
 const router = express.Router();
-const books = require('./booksdb');
-
 
 let books = {
       1: {"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },
@@ -16,8 +14,14 @@ let books = {
       10: {"author": "Samuel Beckett","title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} }
 }
 
-router.get('/books', (req, res) => {
-    res.json(books);
+router.get('/books/:id', (req, res) => {
+    const id = req.params.id;
+    const book = books[id];
+    if (book) {
+        res.json(book);
+    } else {
+        res.status(404).json({ message: "Book not found" });
+    }
 });
 
-module.exports=books;
+module.exports = { router, books };
